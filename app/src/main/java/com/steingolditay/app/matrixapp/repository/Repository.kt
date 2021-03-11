@@ -12,9 +12,9 @@ import javax.inject.Inject
 @InstallIn(SingletonComponent::class)
 class Repository
 
-@Inject constructor(private val retrofit: RetrofitInterface) : RetrofitInterface {
+@Inject constructor(private val retrofit: RetrofitInterface) {
 
-    override suspend fun getAllCountries(): List<CountryItem>? {
+    suspend fun getAllCountries(): List<CountryItem>? {
         return try {
             retrofit.getAllCountries()
         } catch (e: Exception) {

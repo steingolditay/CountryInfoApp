@@ -3,7 +3,6 @@ package com.steingolditay.app.matrixapp.model
 import android.os.Parcel
 import android.os.Parcelable
 
-
 data class CountryItem(
     var name: String?,
     var nativeName: String?,

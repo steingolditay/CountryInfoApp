@@ -15,8 +15,8 @@ import javax.inject.Inject
 class CountryListViewModel
 
 @Inject constructor (private val repository: Repository): ViewModel() {
-    private val _countriesData = MutableLiveData<List<CountryItem>>()
-    val countriesData: LiveData<List<CountryItem>> = _countriesData
+    private val _countriesData = MutableLiveData<List<CountryItem>?>()
+    val countriesData: LiveData<List<CountryItem>?> = _countriesData
 
     fun getAllCountries(){
         viewModelScope.launch(Dispatchers.IO) {

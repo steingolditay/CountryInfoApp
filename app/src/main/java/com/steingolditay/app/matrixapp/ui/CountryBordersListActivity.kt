@@ -21,8 +21,8 @@ class CountryBordersListActivity : AppCompatActivity() {
     private lateinit var countryItem: CountryItem
     private lateinit var borderCountriesList: ArrayList<CountryItem>
 
-    private var sortByNameState = Constants.decending
-    private var sortBySizeState = Constants.decending
+    private var sortByNameState = Constants.descending
+    private var sortBySizeState = Constants.descending
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -86,7 +86,7 @@ class CountryBordersListActivity : AppCompatActivity() {
         val sortedMap: List<CountryItem>
             if (sortByNameState == Constants.ascending){
                 sortedMap = borderCountriesList.sortedByDescending {it.name }
-                sortByNameState = Constants.decending
+                sortByNameState = Constants.descending
                 binding.sortByNameArrow.setImageResource(R.drawable.arrow_down)
 
             }
@@ -106,7 +106,7 @@ class CountryBordersListActivity : AppCompatActivity() {
         val sortedMap: List<CountryItem>
         if (sortBySizeState == Constants.ascending){
             sortedMap = borderCountriesList.sortedByDescending {it.area }
-            sortBySizeState = Constants.decending
+            sortBySizeState = Constants.descending
             binding.sortBySizeArrow.setImageResource(R.drawable.arrow_down)
 
         }

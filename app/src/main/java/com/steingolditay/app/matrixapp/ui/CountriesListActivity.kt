@@ -30,8 +30,8 @@ class CountriesListActivity : AppCompatActivity(), CountryListAdapter.OnItemClic
     private var connectedToInternet: Boolean = true
 
     private val networkConnectionMonitor = NetworkConnectionMonitor(this)
-    private var sortByNameState = Constants.decending
-    private var sortBySizeState = Constants.decending
+    private var sortByNameState = Constants.descending
+    private var sortBySizeState = Constants.descending
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -76,12 +76,12 @@ class CountriesListActivity : AppCompatActivity(), CountryListAdapter.OnItemClic
             hideProgressBar()
             if (list != null) {
                 initRecyclerView(list)
-                for (country in list){
+                for (country in list) {
                     countriesMap[country.alpha3Code!!] = country
                 }
 
             } else {
-                if (!errorDialogIsShowing && !connectedToInternet){
+                if (!errorDialogIsShowing && !connectedToInternet) {
                     errorDialogIsShowing = true
                     showDataFetchAlertDialog()
                 }
@@ -157,7 +157,7 @@ class CountriesListActivity : AppCompatActivity(), CountryListAdapter.OnItemClic
         if (listData != null){
             if (sortByNameState == Constants.ascending){
                 sortedMap = listData.sortedByDescending { it.name }.map { it.alpha3Code!! to it }.toMap()
-                sortByNameState = Constants.decending
+                sortByNameState = Constants.descending
                 binding.sortByNameArrow.setImageResource(R.drawable.arrow_down)
 
             }
@@ -181,7 +181,7 @@ class CountriesListActivity : AppCompatActivity(), CountryListAdapter.OnItemClic
         if (listData != null) {
             if (sortBySizeState == Constants.ascending){
                 sortedMap = listData.sortedByDescending { it.area }.map { it.alpha3Code!! to it }.toMap()
-                sortBySizeState = Constants.decending
+                sortBySizeState = Constants.descending
                 binding.sortBySizeArrow.setImageResource(R.drawable.arrow_down)
             }
             else {

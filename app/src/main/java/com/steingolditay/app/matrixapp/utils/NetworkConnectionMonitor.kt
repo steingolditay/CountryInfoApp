@@ -5,10 +5,18 @@ import android.net.ConnectivityManager
 import android.net.Network
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import dagger.Module
+import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
 import java.lang.Exception
+import javax.inject.Inject
 
-class NetworkConnectionMonitor(val context: Context) {
+@InstallIn(SingletonComponent::class)
+@Module
+class NetworkConnectionMonitor
 
+@Inject constructor(@ApplicationContext private val context: Context) {
     private val _liveData = MutableLiveData<Boolean>()
     val liveData: LiveData<Boolean> get() = _liveData
 
@@ -28,10 +36,8 @@ class NetworkConnectionMonitor(val context: Context) {
                     _liveData.postValue(false)
                 }
             })
-
         }
         catch (e: Exception){
-
         }
     }
 

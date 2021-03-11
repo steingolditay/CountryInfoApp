@@ -16,6 +16,7 @@ import com.steingolditay.app.matrixapp.utils.NetworkConnectionMonitor
 import com.steingolditay.app.matrixapp.viewmodels.CountryListViewModel
 import com.steingolditay.app.matrixapp.ui.adapters.CountryListAdapter
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class CountriesListActivity : AppCompatActivity(), CountryListAdapter.OnItemClickListener {
@@ -29,7 +30,7 @@ class CountriesListActivity : AppCompatActivity(), CountryListAdapter.OnItemClic
     private var errorDialogIsShowing: Boolean = false
     private var connectedToInternet: Boolean = true
 
-    private val networkConnectionMonitor = NetworkConnectionMonitor(this)
+    @Inject lateinit var networkConnectionMonitor: NetworkConnectionMonitor
     private var sortByNameState = Constants.descending
     private var sortBySizeState = Constants.descending
 
@@ -51,9 +52,14 @@ class CountriesListActivity : AppCompatActivity(), CountryListAdapter.OnItemClic
             sortCountryListBySize()
         }
 
+        initNetworkConnectionMonitor()
 
-        // Watch for internet connectivity changes
-        // if no connection is found, present an error
+    }
+
+    // Watch for internet connectivity changes
+    // if no connection is found, present an error
+    // if connected, init viewmodel
+    private fun initNetworkConnectionMonitor(){
         networkConnectionMonitor.registerNetworkCallback()
         networkConnectionMonitor.liveData.observe(this, {
             connectedToInternet = it
@@ -66,7 +72,6 @@ class CountriesListActivity : AppCompatActivity(), CountryListAdapter.OnItemClic
                 updateUIDisconnected()
             }
         })
-
     }
 
     // fetch data
@@ -115,6 +120,7 @@ class CountriesListActivity : AppCompatActivity(), CountryListAdapter.OnItemClic
         binding.connectionLost.visibility = View.VISIBLE
     }
 
+    // shows up if retrofit response is null
     private fun showDataFetchAlertDialog() {
         val alertBuilder = AlertDialog.Builder(this)
         alertBuilder.setMessage(getString(R.string.service_unavailable))
@@ -133,8 +139,9 @@ class CountriesListActivity : AppCompatActivity(), CountryListAdapter.OnItemClic
         dialog.show()
     }
 
-    // on item click move user to the respective
-    // country activity
+    // on recyclerview item click
+    // move user to the respective country activity
+    // and pass the border counties items
     override fun onItemClick(countryItem: CountryItem) {
         val borderCountries = ArrayList<CountryItem>()
 

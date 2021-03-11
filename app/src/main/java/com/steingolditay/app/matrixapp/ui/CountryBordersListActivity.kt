@@ -18,7 +18,7 @@ class CountryBordersListActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityCountryBordersListBinding
     private lateinit var adapter: CountryBordersListAdapter
-    private lateinit var countryItem: CountryItem
+    private lateinit var presentedCountryItem: CountryItem
     private lateinit var borderCountriesList: ArrayList<CountryItem>
 
     private var sortByNameState = Constants.descending
@@ -32,10 +32,11 @@ class CountryBordersListActivity : AppCompatActivity() {
 
         val bundle = intent.extras
         if (bundle != null){
-            countryItem = bundle.getParcelable(Constants.countryItem)!!
-            borderCountriesList = bundle.getParcelableArrayList(Constants.borderCountriesItems)!!
-            updateUIWithCountryData()
-
+            if (bundle.keySet().contains(Constants.countryItem) && bundle.keySet().contains(Constants.borderCountriesItems)){
+                presentedCountryItem = bundle.getParcelable(Constants.countryItem)!!
+                borderCountriesList = bundle.getParcelableArrayList(Constants.borderCountriesItems)!!
+                updateUIData()
+            }
         }
 
         binding.sortByName.setOnClickListener{
@@ -49,10 +50,10 @@ class CountryBordersListActivity : AppCompatActivity() {
     }
 
 
-    private fun updateUIWithCountryData(){
-        GlideToVectorYou.justLoadImage(this, Uri.parse(countryItem.flag), binding.flag)
-        binding.countryName.text = countryItem.name
-        binding.countryNativeName.text = countryItem.nativeName
+    private fun updateUIData(){
+        GlideToVectorYou.justLoadImage(this, Uri.parse(presentedCountryItem.flag), binding.flag)
+        binding.countryName.text = presentedCountryItem.name
+        binding.countryNativeName.text = presentedCountryItem.nativeName
 
         if (borderCountriesList.isNotEmpty()){
             initRecyclerView(borderCountriesList.toList())
@@ -70,6 +71,7 @@ class CountryBordersListActivity : AppCompatActivity() {
         binding.recyclerView.adapter = adapter
     }
 
+    // shows if presented country has no border countries
     private fun updateUINoBorderCountriesToShow(){
         binding.recyclerView.visibility = View.GONE
         binding.sortByName.visibility = View.GONE

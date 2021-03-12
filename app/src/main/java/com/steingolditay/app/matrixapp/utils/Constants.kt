@@ -4,7 +4,7 @@ object Constants {
 
     const val apiBaseUrl = "https://restcountries.eu/rest/v2/"
     const val ascending = "ascending"
-    const val descending = "decending"
+    const val descending = "descending"
     const val countryItem = "countryItem"
     const val borderCountriesItems = "borderCountriesItems"
 

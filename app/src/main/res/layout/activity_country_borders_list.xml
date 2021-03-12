@@ -10,6 +10,7 @@
 
     <ImageView
         android:id="@+id/flag"
+        android:contentDescription="@string/image_description"
         android:layout_width="150dp"
         android:layout_height="150dp"
         app:layout_constraintStart_toStartOf="parent"
@@ -42,31 +43,19 @@
         android:textAlignment="center"
         />
 
-    <TextView
-        android:id="@+id/sortByName"
+    <Button
+        android:id="@+id/sortByNameButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/divider"
         app:layout_constraintTop_toBottomOf="@id/countryNativeName"
-        android:layout_margin="10dp"
+        android:drawableTint="@color/white"
         android:text="@string/sort_by_name"
-        android:textSize="16sp"
-        android:padding="5dp"
-
+        android:layout_margin="10dp"
+        android:textSize="12sp"
         />
 
-    <ImageView
-        android:id="@+id/sortByNameArrow"
-        android:layout_width="18dp"
-        android:layout_height="18dp"
-        android:src="@drawable/arrow_down"
-        app:layout_constraintStart_toEndOf="@id/sortByName"
-        app:layout_constraintTop_toTopOf="@id/sortByName"
-        app:layout_constraintBottom_toBottomOf="@id/sortByName"
-        android:layout_margin="5dp"
-        android:visibility="gone"
-        />
 
     <View
         android:id="@+id/divider"
@@ -77,38 +66,24 @@
         app:layout_constraintTop_toBottomOf="@id/countryNativeName"
         />
 
-    <TextView
-        android:id="@+id/sortBySize"
+    <Button
+        android:id="@+id/sortBySizeButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toEndOf="@id/divider"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/countryNativeName"
-        android:layout_margin="10dp"
+        android:drawableTint="@color/white"
         android:text="@string/sort_by_size"
-        android:textSize="16sp"
-        android:padding="5dp"
-
-        />
-
-    <ImageView
-        android:id="@+id/sortBySizeArrow"
-        android:layout_width="18dp"
-        android:layout_height="18dp"
-        android:src="@drawable/arrow_down"
-        app:layout_constraintStart_toEndOf="@id/sortBySize"
-        app:layout_constraintTop_toTopOf="@id/sortBySize"
-        app:layout_constraintBottom_toBottomOf="@id/sortBySize"
-        android:layout_margin="5dp"
-        android:visibility="gone"
-
+        android:layout_margin="10dp"
+        android:textSize="12sp"
         />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/sortBySize"
+        app:layout_constraintTop_toBottomOf="@id/sortByNameButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="10dp"
@@ -128,6 +103,7 @@
 
         <ImageView
             android:id="@+id/icon"
+            android:contentDescription="@string/image_description"
             android:layout_width="100dp"
             android:layout_height="100dp"
             app:layout_constraintStart_toStartOf="parent"

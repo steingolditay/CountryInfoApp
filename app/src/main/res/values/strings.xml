@@ -2,11 +2,11 @@
     <string name="app_name">MatrixApp</string>
     <string name="no_internet">No internet connection\nPlease reconnect to proceed</string>
     <string name="no_border_countries">This country must be very lonely…</string>
-    <string name="area_size">Area Size</string>
     <string name="retry">Retry</string>
     <string name="service_unavailable">Unable to connect to service</string>
     <string name="sort_by_name">Sort by name</string>
-    <string name="sort_by_size">Sort by area size</string>
+    <string name="sort_by_size">Sort by size</string>
+    <string name="image_description">Country Flag Image</string>
 
 
 

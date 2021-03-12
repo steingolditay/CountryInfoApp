@@ -1,11 +1,12 @@
 package com.steingolditay.app.matrixapp.ui
 
-import android.content.DialogInterface
 import android.content.Intent
+import android.graphics.drawable.Drawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.steingolditay.app.matrixapp.R
@@ -35,20 +36,28 @@ class CountriesListActivity : AppCompatActivity(), CountryListAdapter.OnItemClic
     private var sortBySizeState = Constants.descending
 
 
+    private lateinit var arrowUpDrawable: Drawable
+    private lateinit var arrowDownDrawable: Drawable
+
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAllCountryListBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
 
+        arrowUpDrawable = ContextCompat.getDrawable(applicationContext, R.drawable.arrow_up)!!
+        arrowDownDrawable = ContextCompat.getDrawable(applicationContext, R.drawable.arrow_down)!!
+
         viewModel = ViewModelProvider(this).get(CountryListViewModel::class.java)
 
 
-        binding.sortByName.setOnClickListener{
+        binding.sortByNameButton.setOnClickListener{
             sortCountryListByName()
         }
 
-        binding.sortBySize.setOnClickListener {
+        binding.sortBySizeButton.setOnClickListener {
             sortCountryListBySize()
         }
 
@@ -58,18 +67,18 @@ class CountriesListActivity : AppCompatActivity(), CountryListAdapter.OnItemClic
 
     // Watch for internet connectivity changes
     // if no connection is found, present an error
-    // if connected, init viewmodel
+    // if connected, init view model
     private fun initNetworkConnectionMonitor(){
         networkConnectionMonitor.registerNetworkCallback()
         networkConnectionMonitor.liveData.observe(this, {
             connectedToInternet = it
             if (it){
                 showProgressBar()
-                updateUIConnected()
+                updateUiConnected()
                 initViewModel()
             }
             else {
-                updateUIDisconnected()
+                updateUiDisconnected()
             }
         })
     }
@@ -102,20 +111,20 @@ class CountriesListActivity : AppCompatActivity(), CountryListAdapter.OnItemClic
 
     }
 
-    private fun updateUIConnected() {
+    private fun updateUiConnected() {
         binding.recyclerView.visibility = View.VISIBLE
-        binding.sortByName.visibility = View.VISIBLE
-        binding.sortBySize.visibility = View.VISIBLE
+        binding.sortByNameButton.visibility = View.VISIBLE
+        binding.sortBySizeButton.visibility = View.VISIBLE
 
         binding.connectionLost.visibility = View.GONE
     }
 
-    private fun updateUIDisconnected() {
+    private fun updateUiDisconnected() {
         binding.recyclerView.visibility = View.GONE
-        binding.sortByName.visibility = View.GONE
-        binding.sortByNameArrow.visibility = View.GONE
-        binding.sortBySize.visibility = View.GONE
-        binding.sortBySizeArrow.visibility = View.GONE
+        binding.sortByNameButton.visibility = View.GONE
+        setSortByNameDrawable(null)
+        binding.sortBySizeButton.visibility = View.GONE
+        setSortBySizeDrawable(null)
 
         binding.connectionLost.visibility = View.VISIBLE
     }
@@ -126,14 +135,11 @@ class CountriesListActivity : AppCompatActivity(), CountryListAdapter.OnItemClic
         alertBuilder.setMessage(getString(R.string.service_unavailable))
         alertBuilder.setCancelable(false)
 
-        alertBuilder.setPositiveButton(getString(R.string.retry),
-            object : DialogInterface.OnClickListener {
-                override fun onClick(dialog: DialogInterface?, which: Int) {
-                    dialog?.dismiss()
-                    errorDialogIsShowing = false
-                    viewModel.getAllCountries()
-                }
-            })
+        alertBuilder.setPositiveButton(getString(R.string.retry)){ dialog, _ ->
+            dialog?.dismiss()
+            errorDialogIsShowing = false
+            viewModel.getAllCountries()
+        }
         val dialog = alertBuilder.create()
 
         dialog.show()
@@ -156,8 +162,7 @@ class CountriesListActivity : AppCompatActivity(), CountryListAdapter.OnItemClic
     }
 
     private fun sortCountryListByName(){
-        binding.sortByNameArrow.visibility = View.VISIBLE
-        binding.sortBySizeArrow.visibility = View.GONE
+        setSortBySizeDrawable(null)
         val sortedMap: Map<String, CountryItem>
 
         val listData = viewModel.countriesData.value
@@ -165,14 +170,13 @@ class CountriesListActivity : AppCompatActivity(), CountryListAdapter.OnItemClic
             if (sortByNameState == Constants.ascending){
                 sortedMap = listData.sortedByDescending { it.name }.map { it.alpha3Code!! to it }.toMap()
                 sortByNameState = Constants.descending
-                binding.sortByNameArrow.setImageResource(R.drawable.arrow_down)
+                setSortByNameDrawable(arrowDownDrawable)
 
             }
             else {
                 sortedMap = listData.sortedBy { it.name }.map { it.alpha3Code!! to it }.toMap()
                 sortByNameState = Constants.ascending
-                binding.sortByNameArrow.setImageResource(R.drawable.arrow_up)
-
+                setSortByNameDrawable(arrowUpDrawable)
             }
             countriesMap = HashMap(sortedMap)
             initRecyclerView(sortedMap.values.toList())
@@ -180,8 +184,7 @@ class CountriesListActivity : AppCompatActivity(), CountryListAdapter.OnItemClic
     }
 
     private fun sortCountryListBySize(){
-        binding.sortByNameArrow.visibility = View.GONE
-        binding.sortBySizeArrow.visibility = View.VISIBLE
+        setSortByNameDrawable(null)
         val sortedMap: Map<String, CountryItem>
 
         val listData = viewModel.countriesData.value
@@ -189,14 +192,14 @@ class CountriesListActivity : AppCompatActivity(), CountryListAdapter.OnItemClic
             if (sortBySizeState == Constants.ascending){
                 sortedMap = listData.sortedByDescending { it.area }.map { it.alpha3Code!! to it }.toMap()
                 sortBySizeState = Constants.descending
-                binding.sortBySizeArrow.setImageResource(R.drawable.arrow_down)
+                setSortBySizeDrawable(arrowDownDrawable)
             }
             else {
                 sortedMap = listData.sortedBy { it.area }.map { it.alpha3Code!! to it }.toMap()
                 sortBySizeState = Constants.ascending
-                binding.sortBySizeArrow.setImageResource(R.drawable.arrow_up)
+                setSortBySizeDrawable(arrowUpDrawable)
             }
-            countriesMap=  HashMap(sortedMap)
+            countriesMap = HashMap(sortedMap)
 
             initRecyclerView(sortedMap.values.toList())
 
@@ -206,6 +209,30 @@ class CountriesListActivity : AppCompatActivity(), CountryListAdapter.OnItemClic
     private fun showProgressBar(){ binding.progressBar.visibility = View.VISIBLE }
 
     private fun hideProgressBar(){ binding.progressBar.visibility = View.GONE }
+
+    private fun setSortByNameDrawable(drawable: Drawable?){
+        when (drawable) {
+            null -> {
+                binding.sortByNameButton.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null)
+            }
+            else -> {
+                binding.sortByNameButton.setCompoundDrawablesWithIntrinsicBounds(null, null, drawable, null)
+
+            }
+        }
+    }
+
+    private fun setSortBySizeDrawable(drawable: Drawable?){
+        when (drawable) {
+            null -> {
+                binding.sortBySizeButton.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null)
+            }
+            else -> {
+                binding.sortBySizeButton.setCompoundDrawablesWithIntrinsicBounds(null, null, drawable, null)
+
+            }
+        }
+    }
 
 
 }

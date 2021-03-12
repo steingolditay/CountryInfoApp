@@ -8,5 +8,4 @@ interface RetrofitInterface {
     @GET("all")
     suspend fun getAllCountries(): List<CountryItem>?
 
-
 }
